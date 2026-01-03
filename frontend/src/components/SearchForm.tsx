@@ -8,11 +8,23 @@ const SearchForm = () => {
   const [results, setResults] = useState<any[]>([]);
   const [searchTime, setSearchTime] = useState<number | null>(null);
 
+  const dataset_id = sessionStorage.getItem("uploadedEventdataset_id");
+
+
+  const handleHomenav = () => {
+    window.location.href = "/upload";
+  }
+
+  if (!dataset_id) {
+    return <p className="text-red-600">Please upload an event dataset first. <span onClick={handleHomenav}>back to Upload</span></p>;
+  }
+
   const handleSearch = async () => {
     const res = await searchEvents({
       query: srcaddr ? { srcaddr } : {},
       start_time: Number(startTime),
       end_time: Number(endTime),
+      dataset_id: dataset_id,
     });
 
     setResults(res.results);
