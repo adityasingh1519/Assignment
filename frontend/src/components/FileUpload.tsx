@@ -2,7 +2,7 @@ import { useState } from "react";
 import { uploadFiles } from "../services/eventService";
 
 interface Props {
-  onSuccess: () => void;
+  onSuccess: (data: any) => void;
 }
 
 const FileUpload = ({ onSuccess }: Props) => {
@@ -14,8 +14,13 @@ const FileUpload = ({ onSuccess }: Props) => {
 
     setLoading(true);
     try {
-      await uploadFiles(file);
-      onSuccess();
+      const data =  await uploadFiles(file);
+      console.log("Upload successful", data);
+      if (data.dataset_id){
+          onSuccess(data.dataset_id);
+      }
+        
+    
     } catch (err) {
       alert("Upload failed");
     } finally {

@@ -4,7 +4,8 @@ import FileUpload from "../components/FileUpload";
 const UploadPage = () => {
   const navigate = useNavigate();
 
-  const handleSuccess = () => {
+  const handleSuccess = (dataset_id: string) => {
+    sessionStorage.setItem("uploadedEventdataset_id", dataset_id);
     navigate("/search");
   };
 
