@@ -13,9 +13,10 @@ export const uploadFiles = async (file: File) => {
 
 export const searchEvents = async (payload: {
   query: string;
-  start_time: number;
-  end_time: number;
+  start_time: number | null;
+  end_time: number | null;
   dataset_id: string;
+  cursor?: string | null;
 }) => {
   const res = await apiClient.post("/search/", payload);
   return res.data;

@@ -1,5 +1,8 @@
 # api/utils/event_parser.py
 
+import base64
+import json
+
 EVENT_FIELDS = [
     "serialno",
     "version",
@@ -48,8 +51,16 @@ def matches_query(event, query: str) -> bool:
 
     q = query.lower()
 
-    for field in ("account_id", "srcaddr", "dstaddr", "action", "log_status"):
+    for field in ("account_id", "instance_id", "srcaddr", "dstaddr", "action", "log_status"):
         if q in event[field].lower():
             return True
 
     return False
+
+
+
+def encode_cursor(data: dict) -> str:
+    return base64.b64encode(json.dumps(data).encode()).decode()
+
+def decode_cursor(cursor: str) -> dict:
+    return json.loads(base64.b64decode(cursor).decode())

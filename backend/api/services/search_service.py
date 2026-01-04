@@ -2,12 +2,14 @@
 
 import os
 from concurrent.futures import ThreadPoolExecutor
-MAX_RESULTS = 100  
+PAGE_SIZE = 50  
 
 from api.utils.event_parser import (
     parse_event_line,
     within_time_range,
     matches_query,
+    encode_cursor,
+    decode_cursor,
 )
 
 
@@ -42,37 +44,61 @@ def search_file(file_path, query, start_time, end_time):
     return matches
 
 
-def search_dataset(dataset_dir, query, start_time, end_time):
+def search_dataset(
+    dataset_dir,
+    query,
+    start_time,
+    end_time,
+    cursor=None,
+    limit=PAGE_SIZE,
+):
     results = []
+    has_more = False
 
-    log_files = [
+    log_files = sorted(
         os.path.join(dataset_dir, f)
         for f in os.listdir(dataset_dir)
         if os.path.isfile(os.path.join(dataset_dir, f))
-    ]
+    )
 
     if not log_files:
-        return results
+        return results, None, False
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        futures = [
-            executor.submit(
-                search_file,
-                file_path,
-                query,
-                start_time,
-                end_time,
-            )
-            for file_path in log_files
-        ]
+    file_idx = 0
+    line_offset = 0
 
-    for future in futures:
-        file_results = future.result()
+    if cursor:
+        c = decode_cursor(cursor)
+        file_idx = c["file_idx"]
+        line_offset = c["line_offset"]
 
-        for event in file_results:
-            results.append(event)
+    for i in range(file_idx, len(log_files)):
+        file_path = log_files[i]
 
-            if len(results) >= MAX_RESULTS:
-                    return results
+        with open(file_path, "r") as f:
+            for line_no, line in enumerate(f):
+                if i == file_idx and line_no < line_offset:
+                    continue
 
-    return results
+                event = parse_event_line(line)
+                if not event:
+                    continue
+
+                if not within_time_range(event, start_time, end_time):
+                    continue
+
+                if not matches_query(event, query):
+                    continue
+
+                event["file"] = os.path.basename(file_path)
+                results.append(event)
+
+                if len(results) >= limit:
+                    next_cursor = encode_cursor({
+                        "file_idx": i,
+                        "line_offset": line_no + 1,
+                    })
+                    has_more = True
+                    return results, next_cursor, has_more
+
+    return results, None, False
