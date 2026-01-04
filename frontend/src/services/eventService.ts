@@ -12,7 +12,7 @@ export const uploadFiles = async (file: File) => {
 };
 
 export const searchEvents = async (payload: {
-  query: Record<string, string>;
+  query: string;
   start_time: number;
   end_time: number;
   dataset_id: string;

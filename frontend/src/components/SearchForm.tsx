@@ -21,7 +21,7 @@ const SearchForm = () => {
 
   const handleSearch = async () => {
     const res = await searchEvents({
-      query: srcaddr ? { srcaddr } : {},
+      query: srcaddr,
       start_time: Number(startTime),
       end_time: Number(endTime),
       dataset_id: dataset_id,
@@ -66,14 +66,21 @@ const SearchForm = () => {
         </p>
       )}
 
+      {results.length === 0 && (<p className="text-gray-600 space-y-2 ">No results found.</p>
+      )}
+
       <ul className="space-y-2">
         {results.map((r, idx) => (
-          <li key={idx} className="border p-2">
-            <div>{r.event.srcaddr} → {r.event.dstaddr}</div>
-            <div>Action: {r.event.action}</div>
-            <div>File: {r.file}</div>
-          </li>
+          <div key={idx} className="border p-3 rounded bg-gray-50">
+            <div className="font-medium">
+              Event Found: {r.srcaddr} → {r.dstaddr} | Action: {r.action} | Log Status: {r.log_status}
+            </div>
+            <div className="text-sm text-gray-600">
+              File: {r.file}
+            </div>
+          </div>
         ))}
+
       </ul>
     </div>
   );
