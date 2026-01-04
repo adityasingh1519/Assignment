@@ -107,7 +107,13 @@ const SearchForm = () => {
         </button>
       </div>
 
-      {searchTime !== null && (
+      {!loading && results.length > 100 && (
+  <p className="text-yellow-600">
+    Showing first 100 results. Please narrow your search.
+  </p>
+)}
+
+      {!loading && searchTime !== null && (
         <p className="text-sm text-gray-600">
           Search Time: {searchTime}s
         </p>
@@ -115,11 +121,11 @@ const SearchForm = () => {
       {loading ? (<p className="text-gray-600">Searching...</p>
       ) : (null)}
 
-      {results.length === 0 && !loading && (<p className="text-gray-600">No results found.</p>
+      {!loading && results.length === 0  && (<p className="text-gray-600">No results found.</p>
       )}
 
       <ul className="space-y-2">
-        {results.map((r, idx) => (
+        { !loading && results.slice(0, 500).map((r, idx) => (
           <div key={idx} className="border p-3 rounded bg-gray-50">
             <div className="font-medium">
               Event Found: {r.srcaddr} → {r.dstaddr} | Action: {r.action} | Log Status: {r.log_status}

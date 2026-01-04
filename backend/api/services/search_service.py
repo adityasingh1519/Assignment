@@ -2,6 +2,7 @@
 
 import os
 from concurrent.futures import ThreadPoolExecutor
+MAX_RESULTS = 100  
 
 from api.utils.event_parser import (
     parse_event_line,
@@ -12,14 +13,15 @@ from api.utils.event_parser import (
 
 def search_file(file_path, query, start_time, end_time):
     matches = []
+    
 
     file_name = os.path.basename(file_path)
-    
-    print(f"Searching in file: {file_name}")
 
     with open(file_path, "r") as f:
         for line in f:
             event = parse_event_line(line)
+            if len(matches) >= MAX_RESULTS:
+                break
             if not event:
                 continue
 
@@ -48,8 +50,6 @@ def search_dataset(dataset_dir, query, start_time, end_time):
         for f in os.listdir(dataset_dir)
         if os.path.isfile(os.path.join(dataset_dir, f))
     ]
-    print(f"Searching dataset directory: {dataset_dir}")
-    print(f"Found {len(log_files)} log files in dataset.")
 
     if not log_files:
         return results
@@ -66,7 +66,13 @@ def search_dataset(dataset_dir, query, start_time, end_time):
             for file_path in log_files
         ]
 
-        for future in futures:
-            results.extend(future.result())
+    for future in futures:
+        file_results = future.result()
+
+        for event in file_results:
+            results.append(event)
+
+            if len(results) >= MAX_RESULTS:
+                    return results
 
     return results
