@@ -1,0 +1,20 @@
+version: "1.0"
+
+services:
+  backend:
+    build: ./backend
+    container_name: assignment-django-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/events:/app/events
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: assignment-react-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: unless-stopped
