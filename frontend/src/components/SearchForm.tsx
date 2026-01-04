@@ -3,8 +3,9 @@ import { searchEvents } from "../services/eventService";
 
 const SearchForm = () => {
   const [srcaddr, setSrcaddr] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+const [startTime, setStartTime] = useState<number | null>(null);
+const [endTime, setEndTime] = useState<number | null>(null);
+
   const [results, setResults] = useState<any[]>([]);
   const [searchTime, setSearchTime] = useState<number | null>(null);
 
@@ -19,17 +20,36 @@ const SearchForm = () => {
     return <p className="text-red-600">Please upload an event dataset first. <span onClick={handleHomenav}>back to Upload</span></p>;
   }
 
-  const handleSearch = async () => {
-    const res = await searchEvents({
-      query: srcaddr,
-      start_time: Number(startTime),
-      end_time: Number(endTime),
-      dataset_id: dataset_id,
-    });
+const handleSearch = async () => {
+  if (
+    (startTime !== null && !Number.isInteger(startTime)) ||
+    (endTime !== null && !Number.isInteger(endTime))
+  ) {
+    alert("Start Time and End Time must be integers");
+    return;
+  }
 
-    setResults(res.results);
-    setSearchTime(res.search_time_seconds);
-  };
+  if (
+    startTime !== null &&
+    endTime !== null &&
+    startTime > endTime
+  ) {
+    alert("Start Time cannot be greater than End Time");
+    return;
+  }
+
+  const res = await searchEvents({
+    query: srcaddr,
+    start_time: startTime,
+    end_time: endTime,
+    dataset_id,
+  });
+
+  setResults(res.results);
+  setSearchTime(res.search_time_seconds);
+};
+
+
 
   return (
     <div className="space-y-4">
@@ -40,18 +60,29 @@ const SearchForm = () => {
           onChange={(e) => setSrcaddr(e.target.value)}
           className="border p-2"
         />
-        <input
-          placeholder="Start Time"
-          value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
-          className="border p-2"
-        />
-        <input
-          placeholder="End Time"
-          value={endTime}
-          onChange={(e) => setEndTime(e.target.value)}
-          className="border p-2"
-        />
+       <input
+  type="number"
+  placeholder="Start Time"
+  value={startTime ?? ""}
+  onChange={(e) => {
+    const value = e.target.value;
+    setStartTime(value === "" ? null : Number(value));
+  }}
+  className="border p-2"
+/>
+
+<input
+  type="number"
+  placeholder="End Time"
+  value={endTime ?? ""}
+  onChange={(e) => {
+    const value = e.target.value;
+    setEndTime(value === "" ? null : Number(value));
+  }}
+  className="border p-2"
+/>
+
+
         <button
           onClick={handleSearch}
           className="px-4 py-2 bg-green-600 text-white rounded"
