@@ -5,7 +5,7 @@ const SearchForm = () => {
   const [srcaddr, setSrcaddr] = useState("");
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
-
+  const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<any[]>([]);
   const [searchTime, setSearchTime] = useState<number | null>(null);
 
@@ -21,6 +21,10 @@ const SearchForm = () => {
   }
 
   const handleSearch = async () => {
+    if(srcaddr.trim() === "" && startTime === null && endTime === null) {
+      alert("Please provide at least one search criteria.");
+      return;
+    }
     if (
       (startTime !== null && !Number.isInteger(startTime)) ||
       (endTime !== null && !Number.isInteger(endTime))
@@ -39,7 +43,7 @@ const SearchForm = () => {
     }
 
     try {
-
+      setLoading(true);
       const res = await searchEvents({
         query: srcaddr,
         start_time: startTime,
@@ -53,6 +57,8 @@ const SearchForm = () => {
     } catch (error) {
       alert(error.response?.data?.error || "An error occurred during search.");
       return;
+    } finally {
+      setLoading(false);
     }
 
 
@@ -106,8 +112,10 @@ const SearchForm = () => {
           Search Time: {searchTime}s
         </p>
       )}
+      {loading ? (<p className="text-gray-600">Searching...</p>
+      ) : (null)}
 
-      {results.length === 0 && (<p className="text-gray-600 space-y-2 ">No results found.</p>
+      {results.length === 0 && !loading && (<p className="text-gray-600">No results found.</p>
       )}
 
       <ul className="space-y-2">

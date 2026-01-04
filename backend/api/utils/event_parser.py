@@ -28,11 +28,18 @@ def parse_event_line(line: str):
     return dict(zip(EVENT_FIELDS, parts))
 
 
-def within_time_range(event, start_time: int, end_time: int) -> bool:
-    return (
-        int(event["starttime"]) >= start_time
-        and int(event["endtime"]) <= end_time
-    )
+def within_time_range(event, start_time, end_time) -> bool:
+    event_start = int(event["starttime"])
+    event_end = int(event["endtime"])
+
+    if start_time is not None and event_start < start_time:
+        return False
+
+    if end_time is not None and event_end > end_time:
+        return False
+
+    return True
+
 
 
 def matches_query(event, query: str) -> bool:
@@ -41,7 +48,7 @@ def matches_query(event, query: str) -> bool:
 
     q = query.lower()
 
-    for field in ("account_id", "srcaddr", "dstaddr", "action"):
+    for field in ("account_id", "srcaddr", "dstaddr", "action", "log_status"):
         if q in event[field].lower():
             return True
 
