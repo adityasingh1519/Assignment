@@ -13,36 +13,6 @@ from api.utils.event_parser import (
 )
 
 
-def search_file(file_path, query, start_time, end_time):
-    matches = []
-    
-
-    file_name = os.path.basename(file_path)
-
-    with open(file_path, "r") as f:
-        for line in f:
-            event = parse_event_line(line)
-            if len(matches) >= MAX_RESULTS:
-                break
-            if not event:
-                continue
-
-            if not within_time_range(event, start_time, end_time):
-                continue
-
-            if not matches_query(event, query):
-                continue
-
-            matches.append({
-                "srcaddr": event["srcaddr"],
-                "dstaddr": event["dstaddr"],
-                "action": event["action"],
-                "log_status": event["log_status"],
-                "file": file_name,
-            })
-
-    return matches
-
 
 def search_dataset(
     dataset_dir,
