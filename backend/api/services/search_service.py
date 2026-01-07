@@ -2,7 +2,7 @@
 from django.db.models import Q
 from api.models import Event
 
-PAGE_SIZE = 50
+PAGE_SIZE = 10
 
 def search_dataset(
     dataset_id,
@@ -39,21 +39,9 @@ def search_dataset(
     events = []
     for event in results:
         events.append({
-            # 'id': event.id,
             'source_file_name': event.source_file_name,
-            # 'serialno': event.serialno,
-            # 'version': event.version,
-            # 'account_id': event.account_id,
-            # 'instance_id': event.instance_id,
             'srcaddr': event.srcaddr,
             'dstaddr': event.dstaddr,
-            # 'srcport': event.srcport,
-            # 'dstport': event.dstport,
-            # 'protocol': event.protocol,
-            # 'packets': event.packets,
-            # 'bytes': event.bytes,
-            # 'starttime': event.starttime,
-            # 'endtime': event.endtime,
             'action': event.action,
             'log_status': event.log_status,
         })

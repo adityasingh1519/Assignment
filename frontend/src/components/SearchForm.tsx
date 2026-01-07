@@ -13,7 +13,7 @@ const SearchForm = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(false);
-  const limit = 50;
+  const limit = 10;
 
   const dataset_id = sessionStorage.getItem("uploadedEventdataset_id");
 
@@ -23,7 +23,7 @@ const SearchForm = () => {
 
   if (!dataset_id) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen  bg-slate-900  flex items-center justify-center p-4">
         <div className="bg-slate-800 rounded-xl p-8 shadow-2xl border border-red-500/50 max-w-md">
           <div className="flex items-center space-x-3 mb-4">
             <svg
@@ -108,16 +108,15 @@ const SearchForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-6">
+    <div className="min-h-screen bg-slate-900 p-6 bg-slate-900">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mb-2">
+          <h1 className="text-4xl font-bold  text-blue-400  mb-2">
             Event Search
           </h1>
         </div>
 
-        {/* Search Form */}
         <div className="bg-slate-800 rounded-xl shadow-2xl p-6 border border-slate-700 mb-6">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
             <div className="lg:col-span-2">
@@ -198,7 +197,6 @@ const SearchForm = () => {
             </div>
           </div>
 
-          {/* Search Stats */}
           {!loading && searchTime !== null && (
             <div className="flex items-center justify-between pt-4 border-t border-slate-700">
               <div className="flex items-center space-x-6">
@@ -243,7 +241,6 @@ const SearchForm = () => {
           )}
         </div>
 
-        {/* Results */}
         {loading && (
           <div className="flex justify-center items-center py-12">
             <div className="text-center">
@@ -301,7 +298,7 @@ const SearchForm = () => {
         key={idx}
         className="bg-slate-800 rounded-lg p-3 border border-slate-700 "
       >
-        {/* Top section */}
+    
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <span className="text-white text-xs font-medium uppercase tracking-wide">
@@ -351,7 +348,6 @@ const SearchForm = () => {
 )}
 
 
-        {/* Pagination */}
         {!loading && results.length > 0 && totalPages > 1 && (
           <div className="mt-8 flex items-center justify-between bg-slate-800 rounded-xl p-4 border border-slate-700">
             <div className="text-slate-400 text-sm">
@@ -366,7 +362,6 @@ const SearchForm = () => {
                 Previous
               </button>
               
-              {/* Page Numbers */}
               <div className="hidden md:flex space-x-2">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNum;

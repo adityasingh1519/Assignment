@@ -62,16 +62,12 @@ const FileUpload = ({ onSuccess }: Props) => {
     }
   };
 
-  const removeFile = () => {
-    setFile(null);
-    setUploadProgress(false);
-  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-6">
+    <div className="min-h-screen  bg-slate-900  flex items-center justify-center p-6">
       <div className="max-w-3xl w-full">
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-8 border border-slate-700">
-          {/* Header */}
+        <div className=" bg-slate-900  rounded-2xl shadow-2xl p-8 border border-slate-700">
+
           <div className="mb-8 text-center">
   
             <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mb-2">
@@ -79,7 +75,6 @@ const FileUpload = ({ onSuccess }: Props) => {
             </h2>
           </div>
 
-          {/* Upload Area */}
           <div
             className={`relative border-2 border-dashed rounded-xl p-12 transition-all duration-300 ${
               dragActive
@@ -155,41 +150,30 @@ const FileUpload = ({ onSuccess }: Props) => {
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
-                  {!loading && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeFile();
-                      }}
-                      className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors"
-                    >
-                      Remove file
-                    </button>
-                  )}
+                  
                 </div>
               )}
             </div>
           </div>
 
-          {/* Upload Progress */}
           {uploadProgress && loading && (
-            <div className="mt-6 space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-400">Processing...</span>
-                <span className="text-blue-400 font-medium">Please wait</span>
-              </div>
-              <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full animate-pulse"></div>
-              </div>
-            </div>
-          )}
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm">
+    <div className="flex flex-col items-center space-y-4">
 
-          {/* Upload Button */}
+      <div className="h-12 w-12 rounded-full border-4 border-slate-600 border-t-blue-500 animate-spin" />
+
+      <p className="text-slate-300 text-sm tracking-wide">
+        Processing…
+      </p>
+    </div>
+  </div>
+)}
+
           {file && !uploadProgress && (
             <button
               onClick={handleUpload}
               disabled={loading}
-              className="mt-6 w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-3"
+              className="mt-6 w-full px-6 py-4 bg-blue-600  text-white font-semibold text-lg rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-3"
             >
               {loading ? (
                 <>

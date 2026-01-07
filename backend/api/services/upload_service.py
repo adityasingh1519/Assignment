@@ -29,7 +29,8 @@ def handle_event_upload(file_obj: UploadedFile) -> str:
                     if not member.isfile():
                         continue
 
-                    source_file_name = member.name  # <-- THIS IS WHAT YOU NEED
+                    source_file_name = os.path.basename(member.name)
+
 
                     extracted_file = tar.extractfile(member)
                     if not extracted_file:
