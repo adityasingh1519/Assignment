@@ -115,9 +115,6 @@ const SearchForm = () => {
           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mb-2">
             Event Search
           </h1>
-          <p className="text-slate-400">
-            Search through your uploaded event dataset
-          </p>
         </div>
 
         {/* Search Form */}
@@ -169,7 +166,7 @@ const SearchForm = () => {
               <button
                 onClick={() => handleSearch(1)}
                 disabled={loading}
-                className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full px-6 py-3 bg-blue-600  text-white font-semibold rounded-lg shadow-lg  disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {loading ? (
                   <span className="flex items-center justify-center">
@@ -297,75 +294,62 @@ const SearchForm = () => {
           </div>
         )}
 
-        {!loading && results.length > 0 && (
-          <div className="space-y-3">
-            {results.map((r, idx) => (
-              <div
-                key={idx}
-                className="bg-slate-800 rounded-lg p-5 border border-slate-700 hover:border-blue-500/50 transition-all duration-200 hover:shadow-lg"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div>
-                    <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">
-                      Source
-                    </span>
-                    <p className="text-blue-400 font-mono text-sm mt-1">
-                      {r.srcaddr}:{r.srcport}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">
-                      Destination
-                    </span>
-                    <p className="text-cyan-400 font-mono text-sm mt-1">
-                      {r.dstaddr}:{r.dstport}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">
-                      Action
-                    </span>
-                    <p
-                      className={`font-semibold text-sm mt-1 ${
-                        r.action === "ACCEPT"
-                          ? "text-green-400"
-                          : r.action === "REJECT"
-                          ? "text-red-400"
-                          : "text-yellow-400"
-                      }`}
-                    >
-                      {r.action}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 text-xs font-medium uppercase tracking-wide">
-                      Status
-                    </span>
-                    <p className="text-slate-300 text-sm mt-1">{r.log_status}</p>
-                  </div>
-                </div>
-                <div className="mt-4 pt-4 border-t border-slate-700 grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-                  <div>
-                    <span className="text-slate-500">Protocol:</span>{" "}
-                    <span className="text-slate-300">{r.protocol}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500">Packets:</span>{" "}
-                    <span className="text-slate-300">{r.packets}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500">Bytes:</span>{" "}
-                    <span className="text-slate-300">{r.bytes}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500">Account:</span>{" "}
-                    <span className="text-slate-300">{r.account_id}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+      {!loading && results.length > 0 && (
+  <div className="space-y-1">
+    {results.map((r, idx) => (
+      <div
+        key={idx}
+        className="bg-slate-800 rounded-lg p-3 border border-slate-700 "
+      >
+        {/* Top section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <span className="text-white text-xs font-medium uppercase tracking-wide">
+              Event Found 
+            </span>
+            <p className="text-blue-400 font-mono text-sm mt-1">
+              {r.srcaddr} - {r.dstaddr}
+            </p>
           </div>
-        )}
+
+
+          <div>
+            <span className="text-white text-xs font-medium uppercase tracking-wide">
+              Action
+            </span>
+            <p
+              className={`font-semibold text-sm mt-1 ${
+                r.action === "ACCEPT"
+                  ? "text-green-400"
+                  : r.action === "REJECT"
+                  ? "text-red-400"
+                  : "text-yellow-400"
+              }`}
+            >
+              {r.action}
+            </p>
+          </div>
+
+          <div>
+            <span className="text-white text-xs font-medium uppercase tracking-wide">Status</span>
+            <p className="text-slate-300 font-mono text-sm mt-1">
+              {r.log_status}
+            </p>
+          </div>
+
+          <div>
+            <span className="text-white text-xs font-medium uppercase tracking-wide">Source File:</span>
+            <p className="text-slate-300 font-mono text-sm mt-1">
+             {r.source_file_name}
+            </p>
+          </div>
+
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
 
         {/* Pagination */}
         {!loading && results.length > 0 && totalPages > 1 && (
@@ -403,7 +387,7 @@ const SearchForm = () => {
                       disabled={loading}
                       className={`px-4 py-2 rounded-lg transition-all ${
                         currentPage === pageNum
-                          ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white"
+                          ? "bg-blue-600 text-white"
                           : "bg-slate-700 hover:bg-slate-600 text-slate-300"
                       } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >

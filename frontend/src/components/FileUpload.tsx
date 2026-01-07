@@ -181,9 +181,6 @@ const FileUpload = ({ onSuccess }: Props) => {
               <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full animate-pulse"></div>
               </div>
-              <p className="text-slate-500 text-xs text-center">
-                Extracting and processing event data...
-              </p>
             </div>
           )}
 
