@@ -10,10 +10,7 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto ">
-      <h1 className="text-xl font-semibold mb-4">Upload Event Files</h1>
       <FileUpload onSuccess={handleSuccess} />
-    </div>
   );
 };
 

@@ -16,7 +16,8 @@ export const searchEvents = async (payload: {
   start_time: number | null;
   end_time: number | null;
   dataset_id: string;
-  cursor?: string | null;
+  page?: number;
+  limit?: number;
 }) => {
   const res = await apiClient.post("/search/", payload);
   return res.data;
